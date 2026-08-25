@@ -26,13 +26,13 @@ public class MesUserProfiles {
 	@Column(name="profile_name")
 	private String profileName;
 	
-	@Column(name = "profile_value", columnDefinition = "text")
+	@Column(name = "profile_value")
 	private Integer profileValue;
 
-	@Column(name = "profile_value2", columnDefinition = "text")
+	@Column(name = "profile_value2")
 	private Integer profileValue2;
 
-	@Column(name = "profile_value3", columnDefinition = "text")
+	@Column(name = "profile_value3")
 	private Integer profileValue3;
 	
 	@Column(name = "recent_flag")
