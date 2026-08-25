@@ -2,12 +2,12 @@ package com.sindoh.sdmes.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import lombok.Data;
 
@@ -26,13 +26,13 @@ public class MesUserProfiles {
 	@Column(name="profile_name")
 	private String profileName;
 	
-	@Column(name = "profile_value")
+	@Column(name = "profile_value", columnDefinition = "text")
 	private Integer profileValue;
-	
-	@Column(name = "profile_value2")
+
+	@Column(name = "profile_value2", columnDefinition = "text")
 	private Integer profileValue2;
-	
-	@Column(name = "profile_value3")
+
+	@Column(name = "profile_value3", columnDefinition = "text")
 	private Integer profileValue3;
 	
 	@Column(name = "recent_flag")

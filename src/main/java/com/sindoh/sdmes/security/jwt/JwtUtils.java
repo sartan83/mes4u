@@ -1,10 +1,10 @@
 package com.sindoh.sdmes.security.jwt;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,6 @@ import com.sindoh.sdmes.security.service.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -32,7 +31,7 @@ public class JwtUtils {
 	@Value("${sdmes.app.jwtExpirationMs}")
 	private int jwtExpirationMs;
 
-	private Key key;
+	private SecretKey key;
 
 	@PostConstruct
 	public void init() {
@@ -42,22 +41,31 @@ public class JwtUtils {
 	public String generateJwtToken(Authentication authentication) {
 
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+		Date now = new Date();
 
 		return Jwts.builder()
-				.setSubject((userPrincipal.getUsername()))
-				.setIssuedAt(new Date())
-				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-				.signWith(key, SignatureAlgorithm.HS512)
+				.subject(userPrincipal.getUsername())
+				.issuedAt(now)
+				.expiration(new Date(now.getTime() + jwtExpirationMs))
+				.signWith(key, Jwts.SIG.HS512)
 				.compact();
 	}
 
 	public String getUserNameFromJwtToken(String token) {
-		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+		return Jwts.parser()
+				.verifyWith(key)
+				.build()
+				.parseSignedClaims(token)
+				.getPayload()
+				.getSubject();
 	}
 
 	public boolean validateJwtToken(String authToken) {
 		try {
-			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
+			Jwts.parser()
+					.verifyWith(key)
+					.build()
+					.parseSignedClaims(authToken);
 			return true;
 		} catch (SignatureException e) {
 			logger.error("Invalid JWT signature: {}", e.getMessage());

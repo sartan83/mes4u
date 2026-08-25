@@ -2,7 +2,7 @@ package com.sindoh.sdmes.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Table;
+import jakarta.persistence.Table;
 
 import lombok.Data;
 
