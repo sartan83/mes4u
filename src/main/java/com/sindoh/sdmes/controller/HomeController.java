@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(value = "/")
 public class HomeController implements ErrorController {
-	@GetMapping("/")
+	@GetMapping({"/", "/login"})
 	public String index() {
 		return "index.html";
 	}

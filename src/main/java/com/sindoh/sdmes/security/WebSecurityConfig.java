@@ -1,5 +1,7 @@
 package com.sindoh.sdmes.security;
 
+import jakarta.servlet.DispatcherType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -62,8 +64,9 @@ public class WebSecurityConfig {
 			.sessionManagement(sessionManagement -> sessionManagement
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+					.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
 					.requestMatchers("/api/**").permitAll()
-					.requestMatchers("/", "/error", "/js/**", "/css/**", "/fonts/**", "/img/**").permitAll()
+					.requestMatchers("/", "/index.html", "/login", "/error", "/js/**", "/css/**", "/fonts/**", "/img/**").permitAll()
 					.requestMatchers("/favicon.ico").permitAll()
 					.anyRequest().authenticated());
 
