@@ -66,7 +66,7 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 					.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
 					.requestMatchers("/api/**").permitAll()
-					.requestMatchers("/", "/index.html", "/login", "/error", "/js/**", "/css/**", "/fonts/**", "/img/**").permitAll()
+					.requestMatchers("/", "/index.html", "/error", "/js/**", "/css/**", "/fonts/**", "/img/**").permitAll()
 					.requestMatchers("/favicon.ico").permitAll()
 					.anyRequest().authenticated());
 
