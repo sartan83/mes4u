@@ -105,7 +105,7 @@ Spring Boot - Maven Project에서 사용할 라이브러리를 나타내며, 현
 + Devtools
 + PostgreSQL
 + Lombok
-+ Swagger-UI
++ springdoc-openapi (Swagger UI: /swagger-ui/index.html)
 
 특별한 변경 사항은 없으며, 추가로 라이브러리를 사용해서 변경하고 싶을 경우에는 pom.xml 파일에서 추가 후, Maven - Update Project를 통해서 라이브러리를 다운로드 및 사용할 수 있습니다.
 

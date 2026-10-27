@@ -35,7 +35,7 @@ mes4u는 자사의 제조 현장에서 사용 중인 생산관리 시스템의 �
 - Database: PostgreSQL 9.6.18
 - Back-end
   + Framework: Spring Boot
-  + Java: 1.8
+  + Java: 21
   + Maven: 4.0.0
 - Front-end
   + Vue.js: 2.6.10
@@ -56,7 +56,8 @@ mes4u는 제조 분야에 의존하지 않으므로 실제 사용을 위해서�
   + Spring Tool Suite 4
   + Visual Studio Code
   + PostgreSQL
-  + JDK 1.8
+  + JDK 21
+  + Apache Tomcat 10.1+ (Jakarta EE 10)
   
 권장 웹 브라우저는 다음과 같습니다.
 
