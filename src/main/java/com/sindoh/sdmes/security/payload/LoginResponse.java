@@ -2,7 +2,7 @@ package com.sindoh.sdmes.security.payload;
 
 import java.util.Map;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 import lombok.Data;
 

@@ -2,6 +2,8 @@ package com.sindoh.sdmes.security.jwt;
 
 import java.util.Date;
 
+import javax.crypto.SecretKey;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,39 +15,45 @@ import com.sindoh.sdmes.security.service.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 
 @Component
 public class JwtUtils {
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
+	// Base64-encoded, at least 64 bytes once decoded (HS512 minimum key size).
 	@Value("${sdmes.app.jwtSecret}")
 	private String jwtSecret;
 
 	@Value("${sdmes.app.jwtExpirationMs}")
 	private int jwtExpirationMs;
 
+	private SecretKey key() {
+		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+	}
+
 	public String generateJwtToken(Authentication authentication) {
 
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
 		return Jwts.builder()
-				.setSubject((userPrincipal.getUsername()))
-				.setIssuedAt(new Date())
-				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-				.signWith(SignatureAlgorithm.HS512, jwtSecret)
+				.subject(userPrincipal.getUsername())
+				.issuedAt(new Date())
+				.expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+				.signWith(key(), Jwts.SIG.HS512)
 				.compact();
 	}
 
 	public String getUserNameFromJwtToken(String token) {
-		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+		return Jwts.parser().verifyWith(key()).build().parseSignedClaims(token).getPayload().getSubject();
 	}
 
 	public boolean validateJwtToken(String authToken) {
 		try {
-			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+			Jwts.parser().verifyWith(key()).build().parseSignedClaims(authToken);
 			return true;
 		} catch (SignatureException e) {
 			logger.error("Invalid JWT signature: {}", e.getMessage());
