@@ -38,7 +38,7 @@ After competing user and DB registration, download the schema creation script an
 
 mes4u is an open-source software built using Spring Framework. It is based on Maven project
 
-For Running, default Java setting is jre 1.8 but need to change jdk 1.8. Change procedures are below.
+mes4u requires JDK 21 (Spring Boot 3.2). For running from the IDE, set the project JRE to a JDK 21. Change procedures are below.
 
 + Project Right Click - Properties
 + Java Build Path - Libraries Tab - JRE System Library - Edit
@@ -72,18 +72,18 @@ spring.datasource.tomcat.max-wait=10000
 spring.datasource.tomcat.max-active=20
 
 spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation= true
-spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.open-in-view=false
 
-# Hibernate ddl auto (create, create-drop, validate, update)
-spring.jpa.hibernate.ddl-auto= update
+# Schema is owned by pgschemascript.sql. Do not use "update": Hibernate 6 alters existing column types (e.g. timestamp -> date).
+spring.jpa.hibernate.ddl-auto= none
 spring.data.jdbc.repositories.enabled=false
 
 mybatis.mapper-locations=com/sindoh/sdmes/mapper/*.xml
 
 # Project Custom Values
 sdmes.datasource.db=sdmes
-sdmes.app.jwtSecret=sdmes
+# Base64-encoded HMAC key, at least 64 bytes once decoded (HS512). Override with the SDMES_JWT_SECRET env variable, e.g. `openssl rand -base64 64`.
+sdmes.app.jwtSecret=${SDMES_JWT_SECRET:<base64 key>}
 sdmes.app.jwtExpirationMs=86400000
 ```
 
@@ -102,7 +102,7 @@ This file specifies libraries used by Spring Boot - Maven Project. Currently it 
 + Devtools
 + PostgreSQL
 + Lombok
-+ Swagger-UI
++ springdoc-openapi (Swagger UI at /swagger-ui/index.html, OpenAPI JSON at /v3/api-docs)
 
 If you want to add more libraries, just add them into 'pom.xml'. After that, you must run 'Maven - Update Project' to download and use the libraries.
 
@@ -155,7 +155,7 @@ mes4u can be executed by Spring Boot App of STS4 (Spring Tool Suite) or execute 
 java -jar ROOT.war
 ```
 
-Default setup URL is http://localhost:8080. If you want to use another server, run it in Tomcat Server. When connected to http://localhost:8080, the following screen is shown.
+Default setup URL is http://localhost:8080. If you want to use another server, deploy it to Tomcat 10.1 or later (Tomcat 9 and earlier are not supported because the app uses the Jakarta Servlet 6 API). When connected to http://localhost:8080, the following screen is shown.
 
 ![Login Page](./images/login_page.png)
 

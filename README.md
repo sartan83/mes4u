@@ -35,8 +35,8 @@ The system's environment is below.
 
 - Database: PostgreSQL 9.6.18
 - Back-end
-  + Framework: Spring Boot
-  + Java: 1.8
+  + Framework: Spring Boot 3.2
+  + Java: 21
   + Maven: 4.0.0
 - Front-end
   + Vue.js: 2.6.10
@@ -57,7 +57,8 @@ The use of mes4u is not limited to manufacturing sites only. If you want to cust
   + Spring Tool Suite 4
   + Visual Studio Code
   + PostgreSQL
-  + JDK 1.8
+  + JDK 21
+  + Apache Tomcat 10.1+ (Jakarta EE 10) for WAR deployment
   
 Recommended web browsers
 
